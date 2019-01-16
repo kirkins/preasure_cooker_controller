@@ -28,9 +28,15 @@ void loop() {
       start();
     }
   case 1:
-    preHeat();
+    preHeatStart();
     break;
   case 2:
+    preHeat();
+    break;
+  case 3:
+    mainHeatStart();
+    break;
+  case 4:
     mainHeat();
     break;
   }
@@ -41,10 +47,18 @@ void start() {
   processPhase = 1;
 }
 
+void preHeatStart() {
+  // Before reaching target temperature
+}
+
 void preHeat() {
   // Start heating to 212 for 10 minutes
   // Only start timer below once temp is 212
   timer.setCounter(0, preheatMinutes, 0, timer.COUNT_DOWN, mainHeat);
+}
+
+void mainHeatStart() {
+  // Before reaching target temperature
 }
 
 void mainHeat() {

@@ -21,9 +21,11 @@ A sketch to control preasure cooker.
 ## Process Phases
 
 - Phase 0: button has not been pressed yet
-- Phase 1: pre-heat phase
-- Phase 2: main heating phase
-- Phase 3: done, allow nothing to be done
+- Phase 1: pre-heat start phase
+- Phase 2: pre-heat phase
+- Phase 3: main heating start phase
+- Phase 4: main heating phase
+- Phase 5: done, allow nothing to be done
     
 ## Libraries Used
 
