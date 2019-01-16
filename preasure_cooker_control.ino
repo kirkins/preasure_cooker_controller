@@ -22,24 +22,27 @@ void setup() {
 
 void loop() {
   if (digitalRead(startBtn)== HIGH && processPhase == 0) {
-    processPhase = 1;
     start();
+  }
+  switch (processPhase) {
+  case 1:
+    preHeat();
+    break;
+  case 2:
+    mainHeat();
+    break;
   }
 }
 
 void start() {
   tone(buzzer, 1000);
-  preHeat();
+  processPhase = 1;
 }
 
 void preHeat() {
   // Start heating to 212 for 10 minutes
   // Only start timer below once temp is 212
   timer.setCounter(0, preheatMinutes, 0, timer.COUNT_DOWN, mainHeat);
-  // If still in preHeat phase loop
-  if(processPhase == 1) {
-    preHeat();
-  }
 }
 
 void mainHeat() {
@@ -48,10 +51,6 @@ void mainHeat() {
   tone(buzzer, 2000, alarmTime);
   // Run heating code add mainTemp with heatDial
   timer.setCounter(heatingHours, 0, 0, timer.COUNT_DOWN, heatingDone);
-  // If still in mainHeat phase loop
-  if(processPhase == 2) {
-    mainHeat();
-  }
 }
 
 void heatingDone() {
