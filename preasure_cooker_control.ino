@@ -21,10 +21,12 @@ void setup() {
 }
 
 void loop() {
-  if (digitalRead(startBtn)== HIGH && processPhase == 0) {
-    start();
-  }
+  // Check process phase
   switch (processPhase) {
+  case 0:
+    if (digitalRead(startBtn)== HIGH) {
+      start();
+    }
   case 1:
     preHeat();
     break;
