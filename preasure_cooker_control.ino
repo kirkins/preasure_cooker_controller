@@ -7,8 +7,8 @@
 #define heatDial       A1
 #define rco            8
 
-int warmupTemp       = 212;
-int defaultTemp      = 240;
+int warmupTemp       = 99;
+int defaultTemp      = 120;
 int preheatMinutes   = 10;      // 10 minutes
 int alarmTime        = 60000;   // 60000 miliseconds (1 minute)
 int heatingHours     = 5;       // 5 hours
@@ -49,6 +49,10 @@ void start() {
 
 void preHeatStart() {
   // Before reaching target temperature
+  float temp = getTemp();
+  if(temp > warmupTemp) {
+    phase = 2;
+  }
 }
 
 void preHeat() {
@@ -73,4 +77,11 @@ void heatingDone() {
   processPhase = 3;
   // process is finished
   tone(buzzer, 3000, alarmTime);
+}
+
+float getTemp() {
+  rawvoltage= analogRead(tempSensor);
+  float millivolts= (rawvoltage/1024.0) * 5000;
+  float celsius= millivolts/10;
+  return celsius;
 }
