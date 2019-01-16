@@ -24,7 +24,7 @@ void loop() {
   // Check process phase
   switch (processPhase) {
   case 0:
-    if (digitalRead(startBtn)== HIGH) {
+    if (digitalRead(startBtn) == HIGH) {
       start();
     }
   case 1:
