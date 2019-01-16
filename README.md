@@ -18,6 +18,13 @@ A sketch to control preasure cooker.
     int alarmTime        = 60000;   // 60000 miliseconds (1 minute)
     int heatingHours     = 5;       // 5 hours
     bool isRunning       = false;
+
+## Process Phases
+
+- Phase 0: button has not been pressed yet
+- Phase 1: pre-heat phase
+- Phase 2: main heating phase
+- Phase 3: done, allow nothing to be done
     
 ## Libraries Used
 
