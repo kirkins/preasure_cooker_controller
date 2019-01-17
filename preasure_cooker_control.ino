@@ -63,6 +63,12 @@ void preHeat() {
 
 void mainHeatStart() {
   // Before reaching target temperature
+  float temp = getTemp();
+  // Target should add 0-20 based on heatDial
+  float targetTemp = defaultTemp + getHeatDial();
+  if(temp > targetTemp) {
+    phase = 4;
+  }
 }
 
 void mainHeat() {
@@ -84,4 +90,9 @@ float getTemp() {
   float millivolts= (rawvoltage/1024.0) * 5000;
   float celsius= millivolts/10;
   return celsius;
+}
+
+float getHeatDial() {
+  float tempAdjustment = (analogRead(heatDial)/1023) * 20;
+  return tempAdjustment;
 }
