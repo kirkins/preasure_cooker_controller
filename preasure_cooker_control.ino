@@ -14,14 +14,17 @@ int alarmTime        = 60000;   // 60000 miliseconds (1 minute)
 int heatingHours     = 5;       // 5 hours
 int processPhase     = 0;
 
+double currentTemp, pidOutput, targetTemp;
+PID heatingPID(&currentTemp, &pidOutput, &targetTemp,5,15,0, DIRECT);
+
 Countimer timer;
 
 void setup() {
-  // put your setup code here, to run once:
+  heatingPID.SetMode(AUTOMATIC);
 }
 
 void loop() {
-  // Check process phase
+  // Check process phase and run associated loop
   switch (processPhase) {
   case 0:
     if (digitalRead(startBtn) == HIGH) {
@@ -47,18 +50,28 @@ void start() {
   processPhase = 1;
 }
 
+// Process phases and alarms
 void preHeatStart() {
   // Before reaching target temperature
-  float temp = getTemp();
-  if(temp > warmupTemp) {
+  currentTemp = getTemp();
+  targetTemp = warmupTemp;
+  heatingPID.Compute();
+  if(currentTemp > warmupTemp) {
+    timer.setCounter(0, preheatMinutes, 0, timer.COUNT_DOWN, preHeatAlarm);
     processPhase = 2;
   }
 }
 
 void preHeat() {
   // Start heating to 212 for 10 minutes
-  // Only start timer below once temp is 212
-  timer.setCounter(0, preheatMinutes, 0, timer.COUNT_DOWN, mainHeat);
+  currentTemp = getTemp();
+  heatingPID.Compute();
+}
+
+void preHeatAlarm() {
+  // preheat done, switch phase and sound alarm
+  processPhase = 3;
+  tone(buzzer, 2000, alarmTime);
 }
 
 void mainHeatStart() {
@@ -66,25 +79,25 @@ void mainHeatStart() {
   float temp = getTemp();
   // Target should add 0-20 based on heatDial
   float targetTemp = defaultTemp + getHeatDial();
+  heatingPID.Compute();
   if(temp > targetTemp) {
+    timer.setCounter(heatingHours, 0, 0, timer.COUNT_DOWN, heatingDone);
     processPhase = 4;
   }
 }
 
 void mainHeat() {
-  processPhase = 2;
-  // preheat done, start main heating function
-  tone(buzzer, 2000, alarmTime);
   // Run heating code add mainTemp with heatDial
-  timer.setCounter(heatingHours, 0, 0, timer.COUNT_DOWN, heatingDone);
+  float temp = getTemp();
+  heatingPID.Compute();
 }
 
 void heatingDone() {
-  processPhase = 3;
-  // process is finished
+  processPhase = 5;
   tone(buzzer, 3000, alarmTime);
 }
 
+// Helper functions
 float getTemp() {
   float rawvoltage= analogRead(tempSensor);
   float millivolts= (rawvoltage/1024.0) * 5000;
