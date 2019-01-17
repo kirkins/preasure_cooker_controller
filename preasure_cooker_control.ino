@@ -110,6 +110,6 @@ float getTemp() {
 }
 
 float getHeatDial() {
-  float tempAdjustment = (analogRead(heatDial)/1023) * 20;
+  float tempAdjustment = (((analogRead(heatDial)-1023)*(-1))/1023) * 20;
   return tempAdjustment;
 }
