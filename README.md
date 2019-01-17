@@ -55,3 +55,7 @@ Start Button:  pin 6
 Temp Sensor:  A0
 Potentiometer:  A1
 Relay control output:  pin 8
+
+## PWM Requirment
+
+mainHeat() will call PID function. Which will calculate an output. We can use that output as an input to a new function created we can call pwm.  The new function will look at the value given to it and determine what fraction of 20 seconds the burner should be on HIGH.   Within that function you set burner to HIGH, then countdown the fraction of 20 seconds that it should be on HIGH, then you set to LOW and countdown the fraction that should be on LOW.  Then it will repeat with the next value from PID function.
