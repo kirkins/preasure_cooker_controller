@@ -57,7 +57,6 @@ void start() {
 void preHeatStart() {
   // Before reaching target temperature
   currentTemp = getTemp();
-  targetTemp = warmupTemp;
   digitalWrite(rco, HIGH);
   if(currentTemp > warmupTemp) {
     timer.setCounter(0, preheatMinutes, 0, timer.COUNT_DOWN, preHeatAlarm);
@@ -67,6 +66,7 @@ void preHeatStart() {
 
 void preHeat() {
   // Start heating to 212 for 10 minutes
+  targetTemp = warmupTemp;
   currentTemp = getTemp();
   heatingPID.Compute();
 }
@@ -81,7 +81,7 @@ void mainHeatStart() {
   // Before reaching target temperature
   float temp = getTemp();
   // Target should add 0-20 based on heatDial
-  float targetTemp = defaultTemp + getHeatDial();
+  targetTemp = defaultTemp + getHeatDial();
   digitalWrite(rco, HIGH);
   if(temp > targetTemp) {
     timer.setCounter(heatingHours, 0, 0, timer.COUNT_DOWN, heatingDone);
@@ -91,6 +91,7 @@ void mainHeatStart() {
 
 void mainHeat() {
   // Run heating code add mainTemp with heatDial
+  targetTemp = defaultTemp + getHeatDial();
   float temp = getTemp();
   heatingPID.Compute();
 }
