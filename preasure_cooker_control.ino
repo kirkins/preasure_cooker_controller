@@ -21,6 +21,8 @@ Countimer timer;
 
 void setup() {
   heatingPID.SetMode(AUTOMATIC);
+  Serial.begin(9600);
+  pinMode(rco, OUTPUT);
 }
 
 void loop() {
@@ -30,6 +32,7 @@ void loop() {
     if (digitalRead(startBtn) == HIGH) {
       start();
     }
+    break;
   case 1:
     preHeatStart();
     break;
@@ -55,7 +58,7 @@ void preHeatStart() {
   // Before reaching target temperature
   currentTemp = getTemp();
   targetTemp = warmupTemp;
-  heatingPID.Compute();
+  digitalWrite(rco, HIGH);
   if(currentTemp > warmupTemp) {
     timer.setCounter(0, preheatMinutes, 0, timer.COUNT_DOWN, preHeatAlarm);
     processPhase = 2;
@@ -79,7 +82,7 @@ void mainHeatStart() {
   float temp = getTemp();
   // Target should add 0-20 based on heatDial
   float targetTemp = defaultTemp + getHeatDial();
-  heatingPID.Compute();
+  digitalWrite(rco, HIGH);
   if(temp > targetTemp) {
     timer.setCounter(heatingHours, 0, 0, timer.COUNT_DOWN, heatingDone);
     processPhase = 4;
