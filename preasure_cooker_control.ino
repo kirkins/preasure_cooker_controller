@@ -49,7 +49,7 @@ void loop() {
 }
 
 void start() {
-  tone(buzzer, 1000);
+  tone(buzzer, 1000, 1000);
   processPhase = 1;
 }
 
