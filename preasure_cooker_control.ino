@@ -65,10 +65,7 @@ void preHeatStart() {
 }
 
 void preHeat() {
-  // Start heating to 212 for 10 minutes
-  targetTemp = warmupTemp;
-  currentTemp = getTemp();
-  heatingPID.Compute();
+  digitalWrite(rco, HIGH);
 }
 
 void preHeatAlarm() {
