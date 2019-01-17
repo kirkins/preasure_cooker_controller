@@ -51,7 +51,7 @@ void preHeatStart() {
   // Before reaching target temperature
   float temp = getTemp();
   if(temp > warmupTemp) {
-    phase = 2;
+    processPhase = 2;
   }
 }
 
@@ -67,7 +67,7 @@ void mainHeatStart() {
   // Target should add 0-20 based on heatDial
   float targetTemp = defaultTemp + getHeatDial();
   if(temp > targetTemp) {
-    phase = 4;
+    processPhase = 4;
   }
 }
 
@@ -86,7 +86,7 @@ void heatingDone() {
 }
 
 float getTemp() {
-  rawvoltage= analogRead(tempSensor);
+  float rawvoltage= analogRead(tempSensor);
   float millivolts= (rawvoltage/1024.0) * 5000;
   float celsius= millivolts/10;
   return celsius;
