@@ -60,6 +60,7 @@ void preHeatStart() {
   digitalWrite(rco, HIGH);
   if(currentTemp > warmupTemp) {
     timer.setCounter(0, preheatMinutes, 0, timer.COUNT_DOWN, preHeatAlarm);
+    timer.run();
     processPhase = 2;
   }
 }
